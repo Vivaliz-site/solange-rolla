@@ -1,0 +1,3 @@
+# Superseded repository: owner can see all PRs via repository permission.
+# Only actual formal security grants request human review.
+/security/owner-approvals/ @shopvivaliz-human
