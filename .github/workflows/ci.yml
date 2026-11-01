@@ -18,6 +18,11 @@ jobs:
       - name: Validate agent continuity protocol
         run: bash scripts/agent-continuity-validate.sh
 
+      - name: Verify mandatory agent checklist and canonical continuity adapter
+        run: |
+          python3 -m unittest tests.test_agent_checklist_contract_v1 -v
+          python3 scripts/agent_task_state.py --adapter-self-test
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:

@@ -1,3 +1,8 @@
+<!-- MANDATORY_AGENT_CHECKLIST_V1 -->
+## Checklist de execucao obrigatorio (GPT, Codex, Claude, Gemini, Copilot e outros)
+Antes de cada tarefa e em cada nova conversa, carregar no `main` a documentacao canonica ShopVivaliz e as regras deste repositorio. Iniciar ou recuperar a tarefa original com `scripts/agent_task_state.py` conectado ao controlador canonico autorizado, sem criar duplicata nem inferir IDs de conversa. Registrar plano com `plan-checklist --task ID --step "..."`, consultar a proxima etapa via `next-step --task ID` ANTES de agir, executar e validar cada etapa, marcar com `check-step --task ID --step-id N --evidence PROVA --verification VALIDACAO`, e so entao passar para a proxima. Novas exigencias entram via `add-checklist-step`; nenhuma etapa e descartada. Os comandos de registro falham sem o controlador canonico provisionado; nao simular estado local, nem declarar sucesso por ACK, PR, CI verde ou processo ativo. `ready`/`complete` exigem a meta original comprovada, correcoes, regressao, E2E/UI quando aplicavel e merge/deploy validado. Se uma rota tecnica falhar, avaliar alternativas EXISTENTES e independentemente autorizadas (MCP, GitHub, RDC, SSH privado/Tailscale, tuneis, APIs, hosts e ferramentas disponiveis); documentar cada tentativa. `BLOCKED_EXTERNAL` so com impedimento objetivo apos esgotar rotas seguras; jamais burlar MFA, RBAC, 401/403, branch protection, leases ou aprovacoes. O controlador e contingencia, nao substitui a obrigacao de o agente executar e continuar ate concluir. Este contrato deve ser testado e aplicado no CI, nao apenas estar escrito.
+<!-- /MANDATORY_AGENT_CHECKLIST_V1 -->
+
 <!-- REMOTE_ACCESS_EXHAUSTION_GATE_V1 -->
 ## Gate obrigatório: esgotar acesso remoto antes de declarar bloqueio
 Em `Retome`, `Continue`, `Prossiga`, `Siga` ou qualquer tarefa remota, uma falha de MCP/RDC/SSH/rede/autenticacao isolada **não** encerra a execução. Ler AGENTS.md, runbooks locais e `Vivaliz-site/site-shopvivaliz/docs/knowledge/host-access.md` (main atual), comprovando fonte e revisao. Identificar host, identidade e permissoes efetivas.
@@ -81,7 +86,7 @@ Antes de qualquer acao material, leia e cumpra EXECUTION-PROVENANCE-POLICY.md. T
 
 <!-- BROWSER_SESSION_POLICY_V1 -->
 ## Navegador: escolha de host e cleanup obrigatorio
-Antes de browser interativo/remoto, se o host nao estiver explicitamente definido na tarefa, pergunte qual maquina usar. Sessoes invisiveis/headless transitorias devem ter ownership + TTL padrao de 2h renovavel por heartbeat e cleanup ao final/boot. Orfaos podem ser limpos antes; sessoes visiveis e bridges persistentes documentadas devem ser preservadas. Nunca matar navegador globalmente por nome de processo. Leia a politica completa em `REGRAS-AGENTES-CENTRALIZADAS.md` (BROWSER_SESSION_POLICY_V1).
+Antes de browser interativo/remoto, utilizar o navegador corporativo na VM backend autorizada conforme `GLOBAL_BROWSER_VM_POLICY_V2`, sem solicitar selecao de host quando a topologia vigente ja determina o destino. Sessoes invisiveis/headless transitorias devem ter ownership + TTL padrao de 2h renovavel por heartbeat e cleanup ao final/boot. Orfaos podem ser limpos antes; sessoes visiveis e bridges persistentes documentadas devem ser preservadas. Nunca matar navegador globalmente por nome de processo. Leia a politica completa em `REGRAS-AGENTES-CENTRALIZADAS.md` (BROWSER_SESSION_POLICY_V1).
 
 
 <!-- AUDIT_ABSOLUTE_V5_ENTRYPOINT -->
