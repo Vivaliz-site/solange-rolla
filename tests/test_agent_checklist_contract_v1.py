@@ -30,6 +30,14 @@ class AgentChecklistContractTests(unittest.TestCase):
         self.assertIn("tests.test_agent_checklist_contract_v1", data)
         self.assertNotIn("pergunte qual maquina usar", (ROOT / "AGENTS.md").read_text(encoding="utf-8").lower())
 
+    def test_public_repository_governance_runners_are_available(self):
+        # The legacy solange-rolla-ci runner is offline; public GitHub-hosted CI is supported.
+        for rel in ("ci.yml", "absolute-audit-governance.yml", "absolute-audit-main-guard.yml", "repository-governance.yml"):
+            with self.subTest(workflow=rel):
+                flow = (ROOT / ".github/workflows" / rel).read_text(encoding="utf-8")
+                self.assertIn("runs-on: ubuntu-latest", flow)
+                self.assertNotIn("runs-on: [self-hosted, Linux, ARM64, solange-rolla-ci]", flow)
+
     def test_adapter_forwards_checked_step_to_canonical_controller(self):
         with tempfile.TemporaryDirectory() as tmp:
             controller = Path(tmp) / "controller.py"
