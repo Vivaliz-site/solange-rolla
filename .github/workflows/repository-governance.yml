@@ -20,7 +20,7 @@ jobs:
         run: |
           set -Eeuo pipefail
           grep -Fq 'REPOSITÓRIO HISTÓRICO / SUPERSEDIDO' README.md
-          grep -Fq 'fredmourao-ai/solange-rolla-consultorio' README.md
+          grep -Fq 'Vivaliz-site/solange-rolla-consultorio' README.md
 
           for workflow in .github/workflows/ci.yml .github/workflows/repository-governance.yml; do
             grep -Fq "github.event.pull_request.head.repo.full_name == github.repository" "$workflow"
@@ -30,4 +30,9 @@ jobs:
             fi
           done
 
+          python3 -c 'import json, os, sys; sys.exit(0 if json.load(open("docs/quality/AUDIT_PROJECT_REQUIREMENTS.json"))["project"] == os.environ["GITHUB_REPOSITORY"] else 31)'
           echo LEGACY_SOLANGE_CONTAINMENT=PASS
+
+      - name: Validate absolute audit V5 governance bridge
+        shell: bash
+        run: bash scripts/repository-governance-validate.sh ci
