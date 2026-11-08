@@ -270,6 +270,11 @@ def certify(data, requirements=None, fingerprint=REQ_FINGERPRINT):
 
 
 class CertifierTests(unittest.TestCase):
+    def test_project_requirements_match_current_repository(self):
+        import json
+        data = json.loads((ROOT / "docs/quality/AUDIT_PROJECT_REQUIREMENTS.json").read_text(encoding="utf-8"))
+        self.assertEqual("Vivaliz-site/solange-rolla", data["project"])
+
     def test_valid_manifest_is_apto(self):
         verdict, failures = certify(valid_manifest())
         self.assertEqual("APTO", verdict, failures)
