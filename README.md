@@ -2,7 +2,7 @@
 
 > **REPOSITÓRIO HISTÓRICO / SUPERSEDIDO — NÃO USAR PARA NOVO DESENVOLVIMENTO.**
 >
-> O projeto Solange Rolla ativo e canônico está em **`fredmourao-ai/solange-rolla-consultorio`**. Todo código novo, issue, auditoria, release, planejamento e operação deve ocorrer no repositório canônico.
+> O projeto Solange Rolla ativo e canônico está em **`Vivaliz-site/solange-rolla-consultorio`**. Todo código novo, issue, auditoria, release, planejamento e operação deve ocorrer no repositório canônico.
 
 Este repositório preserva o primeiro MVP local do sistema Solange Rolla para fins de histórico e proveniência. Ele não representa o sistema atual e não deve ser usado como fonte de verdade de arquitetura, segurança, prontidão ou produção.
 
@@ -11,9 +11,9 @@ Este repositório preserva o primeiro MVP local do sistema Solange Rolla para fi
 - **Status:** legado/congelado.
 - **Desenvolvimento funcional:** proibido.
 - **Auditoria de prontidão:** não existe mais aqui; a issue #9 foi encerrada como duplicada/supersedida.
-- **Fonte canônica:** `fredmourao-ai/solange-rolla-consultorio`.
-- **Ledger de auditoria válido:** `fredmourao-ai/solange-rolla-consultorio/docs/quality/AUDIT_STATUS.md`.
-- **Governança da unificação:** `fredmourao-ai/solange-rolla-consultorio#147`.
+- **Fonte canônica:** `Vivaliz-site/solange-rolla-consultorio`.
+- **Ledger de auditoria válido:** `Vivaliz-site/solange-rolla-consultorio/docs/quality/AUDIT_STATUS.md`.
+- **Governança da unificação:** `Vivaliz-site/solange-rolla-consultorio#147`.
 
 ## O que este repositório contém
 
@@ -37,7 +37,7 @@ O MVP não possui backend transacional, autenticação real, integração fiscal
 
 Consulte o repositório canônico:
 
-**`fredmourao-ai/solange-rolla-consultorio`**
+**`Vivaliz-site/solange-rolla-consultorio`**
 
 A linhagem e a reconciliação entre este MVP e o sistema atual estão documentadas em:
 
