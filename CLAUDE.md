@@ -1,3 +1,12 @@
+<!-- SHOPVIVALIZ_PR_CONDICIONAL_PTBR_20261108 -->
+## Governança das PRs ShopVivaliz — regra transversal (08/11/2026)
+- **Idioma:** toda PR criada por agentes deve ter título, descrição, justificativas, pedidos de revisão e comentários operacionais em **português brasileiro (pt-BR)**; manter nomes técnicos, caminhos, código e comandos no idioma original.
+- **Aprovação dupla somente quando o diff INTRODUZIR, RESTAURAR ou AGRAVAR bloqueio, trava, restrição, permissão obrigatória, gate ou configuração que possa impedir a execução de comandos, operações, automações, deploys ou merge.** Nesses casos, exigir consentimento expresso do proprietário e revisões GitHub `APPROVED` das duas contas `shopvivaliz-human` e `fredmourao-ai`, no commit HEAD exato. PR protegida deve ser criada por terceira identidade autorizada (nenhuma das duas pode aprovar a própria PR).
+- **PR comum:** documentação, correção técnica, teste, refatoração e melhoria que NÃO adicione nem agrave bloqueio não requerem dupla revisão por esta política; seguem o fluxo automático de correção, validação e integração. Outras revisões de segurança/comerciais já exigidas permanecem válidas.
+- **Sem contorno:** nenhum agente/bot pode simular ou dispensar revisões, introduzir a restrição por outra rota, dividir mudança para escapar da regra, realizar push direto ou usar privilégios administrativos para desativar as proteções. Proteções obrigatórias do provedor, MFA e RBAC permanecem válidas.
+- **Escopo:** todos os repositórios e agentes da organização Vivaliz-site, inclusive Claude, GPT, Codex, Gemini, ações automatizadas e MCPs. A classificação considera o efeito real da alteração; editar `AGENTS.md` ou workflow sem acrescentar restrição não aciona aprovação dupla.
+<!-- /SHOPVIVALIZ_PR_CONDICIONAL_PTBR_20261108 -->
+
 <!-- CLAUDE_READ_AGENTS_FIRST_V1 -->
 > **BOOTSTRAP OBRIGATORIO DO CLAUDE:** antes de analisar, planejar, editar, executar comandos, usar navegador, abrir PR, fazer merge, deploy ou validar qualquer tarefa, leia **integralmente** o `AGENTS.md` da raiz deste repositorio e cumpra todas as instrucoes vigentes nele. Releia o `AGENTS.md` em retomadas de conversa ou quando o arquivo mudar. Se houver divergencia entre este `CLAUDE.md` e o `AGENTS.md`, o `AGENTS.md` prevalece. Nao prossiga assumindo memoria de uma leitura antiga.
 
