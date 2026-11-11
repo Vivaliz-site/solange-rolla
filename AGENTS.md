@@ -14,8 +14,8 @@
 
 <!-- REMOTE_ACCESS_EXHAUSTION_GATE_V1 -->
 ## Gate obrigatório: esgotar acesso remoto antes de declarar bloqueio
-Em `Retome`, `Continue`, `Prossiga`, `Siga` ou qualquer tarefa remota, uma falha de MCP/RDC/SSH/rede/autenticacao isolada **não** encerra a execução. Ler AGENTS.md, runbooks locais e `Vivaliz-site/site-shopvivaliz/docs/knowledge/host-access.md` (main atual), comprovando fonte e revisao. Identificar host, identidade e permissoes efetivas.
-**Verificar todas as rotas aplicaveis, existentes e autorizadas, na prioridade do runbook:** ShopVivaliz Remote Control MCP/controller; RDC e RDC 2 se disponiveis/autorizados; SSH privado/VCN/Tailscale/tunel/reverse SSH documentado; `desktop_*`/bridge/RustDesk para GUI; OCI Bastion, OCI Compute Run Command, serial console e GitHub Actions somente para bootstrap/recovery/reparo, nunca como transporte normal de runtime. Browser ShopVivaliz permanece na VM backend, sem migracao para Windows. Para cada rota, testar conectividade, identidade e capacidade real; corrigir falhas tecnicas autorizadas, recuperar servico/sessao e aplicar retry idempotente e limitado ou fallback.
+Em `Retome`, `Continue`, `Prossiga`, `Siga` ou qualquer tarefa remota, uma falha de MCP/SSH/rede/autenticacao isolada **não** encerra a execução. Ler AGENTS.md, runbooks locais e `Vivaliz-site/site-shopvivaliz/docs/knowledge/host-access.md` (main atual), comprovando fonte e revisao. Identificar host, identidade e permissoes efetivas.
+**Verificar todas as rotas aplicaveis, existentes e autorizadas, na prioridade do runbook:** ShopVivaliz Remote Control MCP/controller; SSH privado/VCN/Tailscale/tunel/reverse SSH documentado; `desktop_*`/bridge/RustDesk para GUI; OCI Bastion, OCI Compute Run Command, serial console e GitHub Actions somente para bootstrap/recovery/reparo, nunca como transporte normal de runtime. Browser ShopVivaliz permanece na VM backend, sem migracao para Windows. Para cada rota, testar conectividade, identidade e capacidade real; corrigir falhas tecnicas autorizadas, recuperar servico/sessao e aplicar retry idempotente e limitado ou fallback.
 Registrar checkpoint nao secreto `remote_access_attempts` por host: rota, objetivo, `PASS/FAILED/NOT_PROVISIONED/NOT_APPLICABLE`, evidencias, causa, reparos e alternativa seguinte. Nao apresentar rota nao provisionada como testada. Manter `RUNNING` enquanto houver acesso alternativo viavel. **`BLOCKED_EXTERNAL` apenas apos exaurir e documentar todos os caminhos tecnicamente viaveis, seguros e autorizados.** `AWAITING_APPROVAL` exige identificar aprovacao obrigatoria exata. Proibidos bypass de MFA/RBAC/branch protection, exibir credenciais, abrir SSH publico, alterar browser para Windows sem autorizacao expressa ou loops infinitos.
 <!-- /REMOTE_ACCESS_EXHAUSTION_GATE_V1 -->
 
@@ -34,12 +34,12 @@ Registrar checkpoint nao secreto `remote_access_attempts` por host: rota, objeti
 - Em toda tarefa operacional, recuperar o ultimo estado e checkpoint confiavel antes de agir; nao repetir operacoes ja concluidas nem descartar trabalho existente.
 - Agir autonomamente dentro das permissoes vigentes. Diagnostico, relatorio, PR aberto, tentativa de comando, timeout ou falha transitoria nao encerram a tarefa.
 - Ciclo obrigatorio: **verificar estado -> executar -> identificar falhas -> investigar causa raiz -> corrigir -> prevenir recorrencia -> testar -> retomar -> validar**.
-- Diante de erro de browser, MCP, RDC, API, CLI, rede, sessao, worker ou integracao, verificar se a acao anterior teve efeito, recuperar de forma idempotente e tentar alternativas tecnicamente viaveis, seguras e autorizadas.
+- Diante de erro de browser, MCP, API, CLI, rede, sessao, worker ou integracao, verificar se a acao anterior teve efeito, recuperar de forma idempotente e tentar alternativas tecnicamente viaveis, seguras e autorizadas.
 - Usar checkpoints, logs e estado persistente quando existirem. Nunca alegar trabalho em segundo plano ou retomada automatica se nao houver controlador realmente configurado e ativo.
 - Manter a tarefa `RUNNING` enquanto existir proxima acao segura e viavel no ambiente de execucao. Declarar `CONCLUIDO` apenas com evidencias frescas, testes pertinentes, regressao e validacao runtime/E2E quando aplicavel.
 - Se houver bloqueio externo objetivo ou aprovacao obrigatoria pendente, registrar causa, evidencias, tentativas, checkpoint e acao exata para retomar; nao contornar protecoes de branch, autenticacao, MFA, politicas de seguranca ou controles de aprovacao.
 - Respeitar regras especificas do repositorio, limites da sessao e escopo de autorizacao. Acao destrutiva ou irreversivel exige autorizacao adequada.
-- A regra vale para agentes, subagentes, Codex, MCP/RDC, automacoes, debugging, auditorias, deploys e retomadas; a resposta final deve distinguir entrega comprovada de bloqueio documentado.
+- A regra vale para agentes, subagentes, Codex, MCP, automacoes, debugging, auditorias, deploys e retomadas; a resposta final deve distinguir entrega comprovada de bloqueio documentado.
 
 Fonte global da politica: `Vivaliz-site/site-shopvivaliz/REGRAS-AGENTES-CENTRALIZADAS.md`.
 <!-- /AUTONOMOUS_RESUME_TO_VALIDATED_COMPLETION_V1 -->
@@ -48,7 +48,7 @@ Fonte global da politica: `Vivaliz-site/site-shopvivaliz/REGRAS-AGENTES-CENTRALI
 <!-- SHOPVIVALIZ_REMOTE_ACCESS_V1 -->
 ## Acesso remoto obrigatório para agentes
 
-Antes de qualquer operação em VM, runtime, navegador, serviço, deploy, logs ou recuperação, leia **`docs/AGENT-REMOTE-ACCESS.md`**. O padrão vigente é SSH privado/Tailscale com `shopvivaliz-agent` para shell, RustDesk self-hosted para GUI, OCI Bastion/control plane auditável quando o ambiente não possui rota privada, e Desktop Commander somente como contingência. Navegador ShopVivaliz deve rodar na VM backend, nunca nos hosts Windows.
+Antes de qualquer operação em VM, runtime, navegador, serviço, deploy, logs ou recuperação, leia **`docs/AGENT-REMOTE-ACCESS.md`**. O padrão vigente é SSH privado/Tailscale com `shopvivaliz-agent` para shell, RustDesk self-hosted para GUI, OCI Bastion/control plane auditável quando o ambiente não possui rota privada, e MCP administrativo nativo para os hosts autorizados. Navegador ShopVivaliz deve rodar na VM backend, nunca nos hosts Windows.
 
 # AGENTS.md
 
