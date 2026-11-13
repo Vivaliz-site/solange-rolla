@@ -24,7 +24,7 @@ fi
 
 "$python_bin" -m py_compile   scripts/certify-audit-manifest.py   scripts/validate-audit-governance.py   scripts/validate-global-audit-policy.py   scripts/validate-main-merge-provenance.py
 
-"$python_bin" -m unittest   tests/test_certify_audit_manifest.py   tests/test_validate_main_merge_provenance.py
+"$python_bin" -m unittest   tests/test_certify_audit_manifest.py tests/test_validate_global_policy_legacy.py   tests/test_validate_main_merge_provenance.py
 
 if [ "$mode" = "ci" ]; then
   "$python_bin" scripts/validate-audit-governance.py     --output-dir "$out_root/audit-governance-self-test"
