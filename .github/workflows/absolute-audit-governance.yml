@@ -13,7 +13,8 @@ on:
       - 'scripts/validate-audit-governance.py'
       - 'scripts/validate-global-audit-policy.py'
       - 'scripts/certify-audit-manifest.py'
-      - 'tests/test_certify_audit_manifest.py tests/test_validate_global_policy_legacy.py'
+      - 'tests/test_certify_audit_manifest.py'
+      - 'tests/test_validate_global_policy_legacy.py'
       - '.github/workflows/absolute-audit-governance.yml'
   push:
     branches: [main]
