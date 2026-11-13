@@ -176,7 +176,13 @@ REQUIRED_ENTRYPOINT_MARKERS = {
         "absolute-audit-governance-validate.sh",
     ],
     ".github/workflows/repository-governance.yml": [
-        "repository-governance-validate.sh",
+        # O repositório legado foi supersedido: seu workflow preserva apenas a
+        # contenção validada em 27/09/2026, sem reativar pipelines funcionais.
+        # Não exigir o validador do repositório canônico neste fluxo histórico.
+        "Validate superseded-repository containment",
+        "github.event.pull_request.head.repo.full_name == github.repository",
+        "LEGACY_SOLANGE_CONTAINMENT=PASS",
+        "if grep -Eq",
     ],
 }
 

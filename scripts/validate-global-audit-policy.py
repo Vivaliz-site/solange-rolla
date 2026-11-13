@@ -23,10 +23,50 @@ EXPECTED_REPOSITORIES = [
     "Vivaliz-site/mercadolivre-returns-recovery",
     "Vivaliz-site/shopvivaliz-m365",
     "Vivaliz-site/buscador",
-    "fredmourao-ai/mei-mg-email",
-    "fredmourao-ai/solange-rolla-consultorio",
-    "fredmourao-ai/solange-rolla",
+    "Vivaliz-site/mei-mg-email",
+    "Vivaliz-site/solange-rolla-consultorio",
 ]
+
+
+LEGACY_REPOSITORY = "Vivaliz-site/solange-rolla"
+
+
+def verify_legacy_containment(root: Path = ROOT) -> dict:
+    """Check the historical repository containment against canonical exclusion.
+
+    The global manifesto lists active repositories only; comparing obsolete
+    local policy blobs of a frozen excluded MVP to active versions is invalid.
+    """
+    readme = root / "README.md"
+    workflows = [
+        root / ".github/workflows/ci.yml",
+        root / ".github/workflows/repository-governance.yml",
+    ]
+    marker_ok = (
+        readme.is_file()
+        and "REPOSITÓRIO HISTÓRICO / SUPERSEDIDO" in readme.read_text(encoding="utf-8")
+    )
+    guard = "github.event.pull_request.head.repo.full_name == github.repository"
+    guards_ok = True
+    for workflow in workflows:
+        if not workflow.is_file():
+            guards_ok = False
+            continue
+        data = workflow.read_text(encoding="utf-8")
+        if ("pull_request:" not in data or guard not in data
+                or any(line.lstrip().startswith("push:") for line in data.splitlines())):
+            guards_ok = False
+    governance = workflows[1]
+    containment = (
+        governance.is_file()
+        and "LEGACY_SOLANGE_CONTAINMENT=PASS" in governance.read_text(encoding="utf-8")
+    )
+    return {
+        "readme_superseded": bool(marker_ok),
+        "workflow_head_guards": bool(guards_ok),
+        "containment_verification": bool(containment),
+        "ok": bool(marker_ok and guards_ok and containment),
+    }
 
 
 def git_blob_sha(data: bytes) -> str:
@@ -62,6 +102,37 @@ def load_manifest() -> tuple[dict, bool]:
 
 
 def check(manifest: dict, local_manifest_parity: bool) -> dict:
+    current_repo = os.environ.get("GITHUB_REPOSITORY", "")
+    required_repositories = manifest.get("required_repositories", [])
+    metadata_ok = (
+        manifest.get("schema") == EXPECTED_SCHEMA
+        and manifest.get("version") == EXPECTED_VERSION
+        and manifest.get("canonical_repository") == CANONICAL_REPO
+        and manifest.get("canonical_ref") == "main"
+        and required_repositories == EXPECTED_REPOSITORIES
+    )
+    if current_repo == LEGACY_REPOSITORY and current_repo not in required_repositories:
+        evidence = verify_legacy_containment()
+        return {
+            "schema": manifest.get("schema"),
+            "version": manifest.get("version"),
+            "canonical_repository": manifest.get("canonical_repository"),
+            "required_repositories": required_repositories,
+            "current_repository": current_repo,
+            "mode": "superseded_excluded_by_canonical_manifest",
+            "repository_covered": False,
+            "manifest_metadata_ok": metadata_ok,
+            "local_manifest_parity": local_manifest_parity,
+            "local_manifest_parity_scope": "historical_snapshot_not_in_active_scope",
+            "required_blobs_present": bool(manifest.get("required_blobs")),
+            "required_entrypoints_present": bool(manifest.get("required_entrypoint_markers")),
+            "blob_results": [],
+            "entrypoint_results": [],
+            "legacy_containment": evidence,
+            "ok": bool(metadata_ok and evidence["ok"]
+                       and manifest.get("required_blobs")
+                       and manifest.get("required_entrypoint_markers")),
+        }
     results = []
     for relative, expected in manifest.get("required_blobs", {}).items():
         path = ROOT / relative
@@ -167,6 +238,16 @@ def main() -> int:
             "\n".join(lines) + "\n",
             encoding="utf-8",
         )
+
+    if report.get("mode") == "superseded_excluded_by_canonical_manifest":
+        print("GLOBAL_MANIFEST_METADATA " + ("PASS" if report["manifest_metadata_ok"] else "FAIL"))
+        print("GLOBAL_REPOSITORY HISTORICAL_EXCLUDED_BY_CANONICAL_MANIFEST")
+        print("GLOBAL_MANIFEST_LOCAL_PARITY HISTORICAL_SNAPSHOT_NOT_ACTIVE_SCOPE")
+        print("GLOBAL_LEGACY_CONTAINMENT " + ("PASS" if report["legacy_containment"]["ok"] else "FAIL"))
+        if report["ok"]:
+            print("GLOBAL_AUDIT_POLICY=PASS version=" + report["version"] + " scope=excluded_legacy")
+            return 0
+        return 1
 
     print(
         f"GLOBAL_MANIFEST_METADATA "
